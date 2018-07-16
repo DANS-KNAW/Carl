@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="javax.servlet">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/WebContent/WEB-INF/lib/javax.servlet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WebContent/WEB-INF/lib/org.restlet.ext.html.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WebContent/WEB-INF/lib/org.restlet.ext.servlet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WebContent/WEB-INF/lib/org.restlet.ext.xml.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
