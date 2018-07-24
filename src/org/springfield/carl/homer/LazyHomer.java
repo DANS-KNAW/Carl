@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.*;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.dom4j.*;
 import org.springfield.carl.CarlServer;
 import org.springfield.mojo.interfaces.ServiceInterface;
@@ -83,7 +84,7 @@ public class LazyHomer implements MargeObserver {
 			LOG.error("Exception ="+e.getMessage());
 		}
 		LOG.info("Carl init service name = carl on ipnumber = "+myip);
-		System.out.println("Carl init service name = carl on ipnumber = "+myip+" on marge port "+port);
+		System.out.println("CARL: init service name = carl on ipnumber = "+myip+" on marge port "+port);
 		marge = new LazyMarge();
 		
 		// lets watch for changes in the service nodes in smithers
@@ -95,12 +96,12 @@ public class LazyHomer implements MargeObserver {
 	public static void addSmithers(String ipnumber,String port,String mport,String role) {
 		int oldsize = smithers.size();
 		if (!(""+LazyHomer.getPort()).equals(mport)) {
-			System.out.println("CARL EXTREME WARNING CLUSTER COLLISION ("+LazyHomer.getPort()+") "+ipnumber+":"+port+":"+mport);
+			System.out.println("CARL: EXTREME WARNING CLUSTER COLLISION ("+LazyHomer.getPort()+") "+ipnumber+":"+port+":"+mport);
 			return;
 		}
 		
 		if (!role.equals(getRole())) {
-			System.out.println("Carl : Ignored this smithers ("+ipnumber+") its "+role+" and not "+getRole()+" like us");
+			System.out.println("CARL: Ignored this smithers ("+ipnumber+") its "+role+" and not "+getRole()+" like us");
 			return;
 		}
 		
@@ -113,7 +114,7 @@ public class LazyHomer implements MargeObserver {
 			sp.setAlive(true); // since talking its alive 
 			noreply = false; // stop asking (minimum of 60 sec, delayed)
 			LOG.info("Carl found smithers at = "+ipnumber+" port="+port+" multicast="+mport);
-			System.out.println("Carl found smithers at = "+ipnumber+" port="+port+" multicast="+mport);
+			System.out.println("CARL: found smithers at = "+ipnumber+" port="+port+" multicast="+mport);
 		} else {
 			if (!sp.isAlive()) {
 				sp.setAlive(true); // since talking its alive again !
@@ -187,7 +188,7 @@ public class LazyHomer implements MargeObserver {
 						foundmynode = true;
 						retryCounter = 0;
 						if (name.equals("unknown")) {
-							System.out.println("This carl is not verified change its name, use smithers todo this for ip "+myip);
+							System.out.println("CARL: This carl is not verified change its name, use smithers todo this for ip "+myip);
 						} else {
 							// so we have a name (verified) return true
 							iamok = true;
@@ -205,7 +206,7 @@ public class LazyHomer implements MargeObserver {
 					try{
 						  os = System.getProperty("os.name");
 					} catch (Exception e){
-						System.out.println("LazyHomer : "+e.getMessage());
+						System.out.println("CARL: LazyHomer : "+e.getMessage());
 					}
 					
 					String newbody = "<fsxml><properties>";
@@ -237,7 +238,7 @@ public class LazyHomer implements MargeObserver {
 	}
 	
 	private void initConfig() {
-		System.out.println("Carl: initializing configuration.");
+		System.out.println("CARL: initializing configuration.");
 		
 		// properties
 		Properties props = new Properties();
@@ -250,13 +251,13 @@ public class LazyHomer implements MargeObserver {
 		
 		// load from file
 		try {
-			System.out.println("INFO: Loading config file from load : "+configfilename);
+			System.out.println("CARL: INFO: Loading config file from load : "+configfilename);
 			File file = new File(configfilename);
 
 			if (file.exists()) {
 				props.loadFromXML(new BufferedInputStream(new FileInputStream(file)));
 			} else { 
-				System.out.println("FATAL: Could not load config "+configfilename);
+				System.out.println("CARL: FATAL: Could not load config "+configfilename);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -270,7 +271,7 @@ public class LazyHomer implements MargeObserver {
 		smithers_port = Integer.parseInt(props.getProperty("default-smithers-port"));
 		role = props.getProperty("role");
 		if (role==null) role = "production";
-		System.out.println("SERVER ROLE="+role);
+		System.out.println("CARL: SERVER ROLE="+role);
 	}
 	
 	public static String getRole() {
@@ -286,7 +287,7 @@ public class LazyHomer implements MargeObserver {
 			s.send(pack,(byte)ttl);
 			s.close();
 		} catch(Exception e) {
-			System.out.println("LazyHomer error "+e.getMessage());
+			System.out.println("CARL: LazyHomer error "+e.getMessage());
 		}
 	}
 	
@@ -361,36 +362,19 @@ public class LazyHomer implements MargeObserver {
 	/**
 	 * Initializes logger
 	 */
-    private void initLogger() {    	 
-    	System.out.println("Initializing logging.");
-    	
-    	// get logging path
-    	String logPath = LazyHomer.getRootPath().substring(0,LazyHomer.getRootPath().indexOf("webapps"));
-		logPath += "logs/carl/carl.log";	
-		
-		try {
-			// default layout
-			Layout layout = new PatternLayout("%-5p: %d{yyyy-MM-dd HH:mm:ss} %c %x - %m%n");
-			
-			// rolling file appender
-			DailyRollingFileAppender appender1 = new DailyRollingFileAppender(layout,logPath,"'.'yyyy-MM-dd");
-			BasicConfigurator.configure(appender1);
-			
-			// console appender 
-			ConsoleAppender appender2 = new ConsoleAppender(layout);
-			BasicConfigurator.configure(appender2);
-		}
-		catch(IOException e) {
-			System.out.println("CarlResource got an exception while initializing the logger.");
-			e.printStackTrace();
-		}
-		
-		Level logLevel = Level.INFO;
-		Logger.getRootLogger().setLevel(Level.OFF);
-		Logger.getLogger(PACKAGE_ROOT).setLevel(logLevel);
-		LOG.info("logging level: " + logLevel);
-		
-		LOG.info("Initializing logging done.");
+    private void initLogger() {
+			System.out.println("CARL: Initializing logging....");
+
+			File xmlConfig = new File("/springfield/carl/log4j.xml");
+			if (xmlConfig.exists()) {
+				System.out.println("CARL: Reading logging config from XML file at " + xmlConfig);
+				DOMConfigurator.configure(xmlConfig.getAbsolutePath());
+				LOG.info("Logging configured from file: " + xmlConfig);
+			}
+			else {
+				System.out.println("CARL: Could not find log config at " + xmlConfig);
+			}
+			LOG.info("Initializing logging done.");
     }
     
     private static void setLogLevel(String level) {
