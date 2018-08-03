@@ -38,7 +38,7 @@ import org.springfield.carl.homer.LazyHomer;
 public class CarlInitialListener implements ServletContextListener {	
 	
 	public void contextInitialized(ServletContextEvent event) {
-		System.out.println("Carl: context created");
+		System.out.println("CARL: context created");
 		ServletContext servletContext = event.getServletContext();
 
 		//load LazyHomer		
@@ -47,6 +47,6 @@ public class CarlInitialListener implements ServletContextListener {
 	}
 	
 	public void contextDestroyed(ServletContextEvent event) {
-		System.out.println("Carl: context destroyed");
+		System.out.println("CARL: context destroyed");
 	}
 }
