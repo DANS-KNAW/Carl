@@ -88,7 +88,6 @@
 			<fileset dir="${lib.dir}" includes="**/*.jar">
 				<exclude name="dom4j-1.6.1.jar"/>
 				<exclude name="jaxen-1.1.1.jar"/>
-				<exclude name="log4j-1.2.15.jar"/>
 				<exclude name="org.restlet.jar" />
 				<exclude name="mojo.jar" />
 				<exclude name="servlet.jar"/>
