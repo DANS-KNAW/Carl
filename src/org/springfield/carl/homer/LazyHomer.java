@@ -95,12 +95,12 @@ public class LazyHomer implements MargeObserver {
 	public static void addSmithers(String ipnumber,String port,String mport,String role) {
 		int oldsize = smithers.size();
 		if (!(""+LazyHomer.getPort()).equals(mport)) {
-			LOG.warn("CARL: EXTREME WARNING CLUSTER COLLISION ("+LazyHomer.getPort()+") "+ipnumber+":"+port+":"+mport);
+			LOG.warn("EXTREME WARNING CLUSTER COLLISION ("+LazyHomer.getPort()+") "+ipnumber+":"+port+":"+mport);
 			return;
 		}
 		
 		if (!role.equals(getRole())) {
-			LOG.debug("CARL: Ignored this smithers ("+ipnumber+") its "+role+" and not "+getRole()+" like us");
+			LOG.debug("Ignored this smithers ("+ipnumber+") its "+role+" and not "+getRole()+" like us");
 			return;
 		}
 		
@@ -186,7 +186,7 @@ public class LazyHomer implements MargeObserver {
 						foundmynode = true;
 						retryCounter = 0;
 						if (name.equals("unknown")) {
-							LOG.warn("CARL: This carl is not verified change its name, use smithers todo this for ip "+myip);
+							LOG.warn("This carl is not verified change its name, use smithers todo this for ip "+myip);
 						} else {
 							// so we have a name (verified) return true
 							iamok = true;
@@ -235,7 +235,7 @@ public class LazyHomer implements MargeObserver {
 	}
 	
 	private void initConfig() {
-		LOG.info("CARL: initializing configuration.");
+		LOG.info("initializing configuration.");
 		
 		// properties
 		Properties props = new Properties();
@@ -248,13 +248,13 @@ public class LazyHomer implements MargeObserver {
 		
 		// load from file
 		try {
-			LOG.debug("CARL: INFO: Loading config file from load : "+configfilename);
+			LOG.debug("INFO: Loading config file from load : "+configfilename);
 			File file = new File(configfilename);
 
 			if (file.exists()) {
 				props.loadFromXML(new BufferedInputStream(new FileInputStream(file)));
 			} else { 
-				LOG.fatal("CARL: FATAL: Could not load config "+configfilename);
+				LOG.fatal("FATAL: Could not load config "+configfilename);
 			}
 		}
 		catch (IOException e) {
@@ -267,7 +267,7 @@ public class LazyHomer implements MargeObserver {
 		smithers_port = Integer.parseInt(props.getProperty("default-smithers-port"));
 		role = props.getProperty("role");
 		if (role==null) role = "production";
-		LOG.info("CARL: SERVER ROLE="+role);
+		LOG.info("SERVER ROLE="+role);
 	}
 	
 	public static String getRole() {
