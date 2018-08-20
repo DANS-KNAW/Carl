@@ -121,8 +121,6 @@ public class CarlServer {
 	 * Loads configuration file.
 	 */
 	private void initConfigurationXML() {
-		System.out.println("CARL: Initializing configuration file.");
-		
 		// configuration file
 		configuration = new Properties();
 		
