@@ -28,7 +28,8 @@ public class CarlProperties {
 	private String preferedsmithers;
 	private String basepath;
 	private String contextpath;
-	
+	private String apiKey;
+
 	public void setIpNumber(String i) {
 		ipnumber = i;
 	}
@@ -56,6 +57,8 @@ public class CarlProperties {
 	public void setStatus(String s) {
 		status = s;
 	}
+
+	public void setApiKey(String k) { apiKey = k;	}
 	
 	public String getName() {
 		return name;
@@ -86,5 +89,7 @@ public class CarlProperties {
 	public String getPreferedSmithers() {
 		return preferedsmithers;
 	}
+
+	public String getApiKey() { return apiKey; }
 	
 }
